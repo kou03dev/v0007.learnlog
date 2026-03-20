@@ -1,18 +1,15 @@
 const SHEET_TRAN = 'トラン';           // トラン シート
 const SHEET_REF  = '参照用マスター';   // 参照用マスター シート
 
-
 // code.gs 全文（mode 1 / mode 2 両方対応）
-// AppVer    06 以降
-// DeployVer 32 以降
 
-// code.gs.txt（DeployVer32のまま・変更なし）
+//    AppVer 07
+//    DeployVer 34
+
+
 // https://www.perplexity.ai/search/itumooshi-hua-ninarimasu-xue-x-q3xpd5n7Ttq_2.oEWVHG7w
-// (perplexity.ai からの、修正内容の説明は以下の通り)
-//   追加機能14は、検索を実行したタイミングで「確定・トランシートへの追記」ブロックの
-//   2つのステータスを空文字に戻す処理だけを入れています。
-//   それ以外の UI・処理（mode1/mode2 切り替え、URL 引数、ログ出力など）は 
-//   DeployVer32 の状態から一切変更していません。
+// code.gs（code.js の整理＋機能追加15反映版・全文）
+
 
 // ◆重要◆
 // 「デプロイ」を実行する前に、
@@ -20,7 +17,7 @@ const SHEET_REF  = '参照用マスター';   // 参照用マスター シート
 // →「prepareNewDeploy (関数)」を実行することで、DeployVer が + 1 されます。
 
 // ★ 手入力で管理するアプリのバージョン（AppVer）
-const APP_VER = '06';
+const APP_VER = '07';
 const APP_BASE_NAME = `学習記録WebApp(AppVer${APP_VER})`;
 
 // ★ Deploy バージョン情報とログの保存先
@@ -39,6 +36,13 @@ const ROW_DIFF = 5;
 
 // 「データが記入済みかどうか」を判定する基準となる列（ここでは C 列）
 const DATA_COLUMN_INDEX = 3;
+
+// 「出力用の値03」に出力する共通メタ情報
+const APP_META = {
+  WebAppName_en_US: 'LearnLogApp',
+  WebAppName_ja_JP: '学習記録アプリ',
+  WebAppVer: APP_VER
+};
 
 /**
  * Web アプリのエントリポイント
@@ -312,6 +316,8 @@ function include(filename) {
  *
  * 機能追加10: 書き込み所要時間を計測して返す。
  *
+ * 機能追加15: 6列目「出力用の値03」に WebApp メタ情報を JSON 形式で出力する。
+ *
  * ※ROW_DIFF が 1 より大きい場合でも、ここで書き込むのは 1 行だけ。
  *   不足分のテンプレート行は ensureTranRows_ でまとめて追加される。
  */
@@ -350,6 +356,17 @@ function appendTran(selected) {
   sheet.getRange(nextRow, 3).setValue(formatted);
   sheet.getRange(nextRow, 4).setValue(selected.output01);
   sheet.getRange(nextRow, 5).setValue(selected.output02);
+
+  // ★追加機能15: 出力用の値03（6列目）に JSON を出力
+  const deployInfo = getCurrentDeployInfo_();
+  const metaForRow = {
+    WebAppName_en_US: APP_META.WebAppName_en_US,
+    WebAppName_ja_JP: APP_META.WebAppName_ja_JP,
+    WebAppVer: APP_META.WebAppVer,
+    DeployVer: String(deployInfo.no),
+    DeployDateTime: deployInfo.datetime
+  };
+  sheet.getRange(nextRow, 6).setValue(JSON.stringify(metaForRow));
 
   const tEndWrite = new Date().getTime();
   const writeElapsedMs = tEndWrite - tStartWrite;

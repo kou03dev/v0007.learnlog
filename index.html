@@ -3,18 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <title><?= fullTitle ?></title>
-  
-  <!-- 
-    ◆追加機能14. 「検索」ボタンを押した後に、
-     「確定・トランシートへの追記」の一つ下の行に記載されている、
-     現状のステータス文字列を長さ 0 の文字列にセットして、
-     なおかつ「選択中の候補をトランに追加」の右側に表示されている、
-     現状のステータス文字列を長さ 0 の文字列にセット機能の追加
-
-          index.html（DeployVer 33 = DeployVer32＋追加機能14）
-
-            https://www.perplexity.ai/search/itumooshi-hua-ninarimasu-xue-x-q3xpd5n7Ttq_2.oEWVHG7w
-    
+  <!--
+    AppVer 07
+    DeployVer 34
   -->
   <style>
     body {
@@ -454,7 +445,7 @@
 
       appendBtn.disabled = false;
 
-      // 機能追加13: 候補選択時に appendStatus をクリア
+      // 候補選択時に appendStatus をクリア
       appendStatusEl.textContent = '';
     }
 
@@ -474,7 +465,7 @@
       status.textContent = '';
       renderSearchSummary(null);
 
-      // ★追加機能14: 検索開始時に「確定・トランシートへの追記」まわりのステータスをクリア
+      // 検索開始時に「確定・トランシートへの追記」まわりのステータスをクリア
       const selectedInfoEl = qs('selectedInfo');
       const appendStatusEl = qs('appendStatus');
       selectedInfoEl.textContent = '現在、選択されている候補はありません。';
