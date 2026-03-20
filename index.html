@@ -3,9 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <title><?= fullTitle ?></title>
-  <!--
-    AppVer 07
-    DeployVer 34
+  
+  <!-- 
+
+  // ◆追加機能15. 「出力用の値03」に、※1で示したように、各種項目名と項目値を出力する機能を追加
+// WebAppName_en-US: LearnLogApp
+// WebAppName_ja-JP: 学習記録アプリ
+// WebAppVer: 07
+// DeployVer (Deploy Version Number)
+// DeployDateTime (Deploy を行った日時)
+    
   -->
   <style>
     body {
@@ -445,7 +452,7 @@
 
       appendBtn.disabled = false;
 
-      // 候補選択時に appendStatus をクリア
+      // 機能追加13: 候補選択時に appendStatus をクリア
       appendStatusEl.textContent = '';
     }
 
@@ -465,7 +472,7 @@
       status.textContent = '';
       renderSearchSummary(null);
 
-      // 検索開始時に「確定・トランシートへの追記」まわりのステータスをクリア
+      // ★追加機能14: 検索開始時に「確定・トランシートへの追記」まわりのステータスをクリア
       const selectedInfoEl = qs('selectedInfo');
       const appendStatusEl = qs('appendStatus');
       selectedInfoEl.textContent = '現在、選択されている候補はありません。';
