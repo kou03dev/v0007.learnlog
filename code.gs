@@ -2,10 +2,11 @@ const SHEET_TRAN = 'トラン';           // トラン シート
 const SHEET_REF  = '参照用マスター';   // 参照用マスター シート
 
 // code.gs 全文（mode 1 / mode 2 両方対応）
-// AppVer    07
-// DeployVer 34
 
-// 2026/03/20 19:58:15 "push and clasp push" test
+// AppVer    07
+// DeployVer 35
+// 2026/03/20 21:52:50 "push and clasp push" test
+
 
 // ◆追加機能15. 「出力用の値03」に、※1で示したように、各種項目名と項目値を出力する機能を追加
 // WebAppName_en-US: LearnLogApp
@@ -382,3 +383,4 @@ function appendTran(selected) {
     writeElapsedMs: writeElapsedMs
   };
 }
+
