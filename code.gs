@@ -2,14 +2,15 @@ const SHEET_TRAN = 'トラン';           // トラン シート
 const SHEET_REF  = '参照用マスター';   // 参照用マスター シート
 
 // code.gs 全文（mode 1 / mode 2 両方対応）
+// AppVer    07
+// DeployVer 34
 
-//    AppVer 07
-//    DeployVer 34
-
-
-// https://www.perplexity.ai/search/itumooshi-hua-ninarimasu-xue-x-q3xpd5n7Ttq_2.oEWVHG7w
-// code.gs（code.js の整理＋機能追加15反映版・全文）
-
+// ◆追加機能15. 「出力用の値03」に、※1で示したように、各種項目名と項目値を出力する機能を追加
+// WebAppName_en-US: LearnLogApp
+// WebAppName_ja-JP: 学習記録アプリ
+// WebAppVer: 07
+// DeployVer (Deploy Version Number)
+// DeployDateTime (Deploy を行った日時)
 
 // ◆重要◆
 // 「デプロイ」を実行する前に、
@@ -379,3 +380,4 @@ function appendTran(selected) {
     writeElapsedMs: writeElapsedMs
   };
 }
+
