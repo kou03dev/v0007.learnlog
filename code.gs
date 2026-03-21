@@ -2,7 +2,7 @@ const SHEET_TRAN = 'トラン';           // トラン シート
 const SHEET_REF  = '参照用マスター';   // 参照用マスター シート
 
 // AppVer    07
-// DeployVer 39
+// DeployVer 40
 // 2026/03/21 11:33:26 
 
 // https://www.perplexity.ai/search/itumooshi-hua-ninarimasu-xue-x-q3xpd5n7Ttq_2.oEWVHG7w
