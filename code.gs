@@ -2,8 +2,8 @@ const SHEET_TRAN = 'トラン';           // トラン シート
 const SHEET_REF  = '参照用マスター';   // 参照用マスター シート
 
 // AppVer    07
-// DeployVer 38
-// 2026/03/21 11:08:13 
+// DeployVer 39
+// 2026/03/21 11:33:26 
 
 // https://www.perplexity.ai/search/itumooshi-hua-ninarimasu-xue-x-q3xpd5n7Ttq_2.oEWVHG7w
 
@@ -11,10 +11,10 @@ const SHEET_REF  = '参照用マスター';   // 参照用マスター シート
 
 // 画面に画面に表示される文字の大きさなどを少し調整して、
 // 「検索条件」から「選択中の候補をトランに追加」の行までが、
-// Windows PC の Web ブラウザ (例、Brave) で、縦スクロース市内で表示されるように、
+// Windows PC の Web ブラウザ (例、Brave) で、縦スクロースしないで表示されるように、
 // 文字のフォントサイズなどを少しだけ小さくする、などの調整
 
-// code.gs は、DeployVer 37 から DeployVer 38 へ
+// code.gs は、DeployVer 37 から DeployVer 39 へ
 // バージョンアップする際に、ソースコード内の処理ロジックは一切変更なし。
 
 

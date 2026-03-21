@@ -11,13 +11,13 @@
 // https://www.perplexity.ai/search/itumooshi-hua-ninarimasu-xue-x-q3xpd5n7Ttq_2.oEWVHG7w
 // 
 // AppVer    07
-// DeployVer 38
-// 2026/03/21 11:08:13 
+// DeployVer 39
+// 2026/03/21 11:33:26 
 // ◆追加機能16. 
 
 // 画面に画面に表示される文字の大きさなどを少し調整して、
 // 「検索条件」から「選択中の候補をトランに追加」の行までが、
-// Windows PC の Web ブラウザ (例、Brave) で、縦スクロース市内で表示されるように、
+// Windows PC の Web ブラウザ (例、Brave) で、縦スクロースしないで表示されるように、
 // 文字のフォントサイズなどを少しだけ小さくする、などの調整
 
 -->
@@ -213,7 +213,7 @@
 
     <div class="mode-input-row">
       <div>
-        <label for="searchModeInput">検索モード（1 または 2 を入力）</label>
+        <label for="searchModeInput">検索モード（1 または 2 を入力）(「1: mode 1 (都度 GAS で検索)」「2: mode 2 (参照用マスター全件を読み込んでメモリ内検索)」)</label>
         <input
           id="searchModeInput"
           type="text"
@@ -224,10 +224,15 @@
         />
       </div>
       <div class="mode-desc">
+        URL で <code>?mode=1</code> または <code>?mode=2</code> を付けて開くと、そのモードが初期値になります。
+      </div>
+      <!--
+      <div class="mode-desc">
         1: mode 1（都度 GAS で検索）<br>
         2: mode 2（参照用マスター全件を読み込んでメモリ内検索）<br>
         URL で <code>?mode=1</code> または <code>?mode=2</code> を付けて開くと、そのモードが初期値になります。
       </div>
+      -->
     </div>
 
     <label for="searchInput">
@@ -246,9 +251,7 @@
     </div>
 
     <div class="info-text">
-      ※半角/全角スペースで区切られたすべての語句を含む行を検索します（AND 条件）。<br>
-      最大 100 件まで表示。候補をクリックすると選択状態になります。<br>
-      この Web アプリは Google Apps Script と Google スプレッドシート上で動作しています。
+      ※1. 半角/全角スペースで区切られたすべての語句を含む行を検索します（AND 条件）。※2. 最大 100 件まで表示。候補をクリックすると選択状態になります。<br> ※3. この Web アプリは Google Apps Script と Google スプレッドシート上で動作しています。
     </div>
   </div>
 
