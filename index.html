@@ -3,71 +3,75 @@
 <head>
   <meta charset="UTF-8">
   <title><?= fullTitle ?></title>
-  
-  <!-- 
 
+<!--
+
+// index.html（追加機能16反映版・全文）
+// 
+// https://www.perplexity.ai/search/itumooshi-hua-ninarimasu-xue-x-q3xpd5n7Ttq_2.oEWVHG7w
+// 
 // AppVer    07
-// DeployVer 35
-// 2026/03/20 21:52:50 "push and clasp push" test
+// DeployVer 38
+// 2026/03/21 11:08:13 
+// ◆追加機能16. 
 
-  // ◆追加機能15. 「出力用の値03」に、※1で示したように、各種項目名と項目値を出力する機能を追加
-// WebAppName_en-US: LearnLogApp
-// WebAppName_ja-JP: 学習記録アプリ
-// WebAppVer: 07
-// DeployVer (Deploy Version Number)
-// DeployDateTime (Deploy を行った日時)
-    
-  -->
+// 画面に画面に表示される文字の大きさなどを少し調整して、
+// 「検索条件」から「選択中の候補をトランに追加」の行までが、
+// Windows PC の Web ブラウザ (例、Brave) で、縦スクロース市内で表示されるように、
+// 文字のフォントサイズなどを少しだけ小さくする、などの調整
+
+-->
+
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       margin: 0;
-      padding: 16px;
+      padding: 12px;
       background-color: #f5f5f5;
     }
 
     h1 {
-      font-size: 20px;
-      margin: 0 0 8px;
+      font-size: 18px;
+      margin: 0 0 6px;
     }
 
     .app-info {
-      font-size: 12px;
+      font-size: 11px;
       color: #555;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
     }
 
     .section {
       background: #fff;
       border-radius: 8px;
-      padding: 12px;
-      margin-bottom: 16px;
+      padding: 10px;
+      margin-bottom: 12px;
       box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
 
     .section-title {
       font-weight: bold;
-      font-size: 14px;
-      margin-bottom: 8px;
+      font-size: 13px;
+      margin-bottom: 6px;
     }
 
     label {
-      font-size: 13px;
+      font-size: 12px;
       display: block;
-      margin-bottom: 4px;
+      margin-bottom: 3px;
     }
 
     input[type="text"] {
       width: 100%;
-      padding: 8px;
-      font-size: 14px;
+      padding: 7px;
+      font-size: 13px;
       border-radius: 4px;
       border: 1px solid #ccc;
       box-sizing: border-box;
     }
 
     button {
-      padding: 6px 12px;
+      padding: 5px 10px;
       font-size: 13px;
       border-radius: 4px;
       border: none;
@@ -91,13 +95,13 @@
     }
 
     .status {
-      font-size: 12px;
+      font-size: 11px;
       color: #666;
-      margin-top: 4px;
+      margin-top: 3px;
     }
 
     .candidates-container {
-      max-height: 260px;
+      max-height: 220px;
       overflow-y: auto;
       border: 1px solid #ccc;
       border-radius: 4px;
@@ -106,8 +110,8 @@
     }
 
     .candidate-item {
-      padding: 4px 6px;
-      font-size: 13px;
+      padding: 3px 5px;
+      font-size: 12px;
       border-radius: 4px;
       cursor: pointer;
     }
@@ -125,7 +129,7 @@
     }
 
     .candidate-meta {
-      font-size: 11px;
+      font-size: 10px;
       color: #555;
       margin-top: 2px;
     }
@@ -133,34 +137,34 @@
     .flex-row {
       display: flex;
       align-items: center;
-      gap: 8px;
-      margin-top: 8px;
+      gap: 6px;
+      margin-top: 6px;
       flex-wrap: wrap;
     }
 
     .info-text {
-      font-size: 12px;
+      font-size: 11px;
       color: #555;
       margin-top: 4px;
     }
 
     .search-summary {
-      font-size: 12px;
+      font-size: 11px;
       color: #333;
-      margin-top: 4px;
+      margin-top: 3px;
     }
 
     .badge {
       display: inline-block;
       padding: 2px 6px;
       border-radius: 12px;
-      font-size: 11px;
+      font-size: 10px;
       background-color: #eee;
       margin-left: 4px;
     }
 
     .log-area {
-      font-size: 11px;
+      font-size: 10px;
       white-space: pre-wrap;
       background: #fafafa;
       border-radius: 4px;
@@ -191,7 +195,7 @@
     }
 
     .mode-desc {
-      font-size: 11px;
+      font-size: 10px;
       color: #555;
     }
   </style>
@@ -456,7 +460,6 @@
 
       appendBtn.disabled = false;
 
-      // 機能追加13: 候補選択時に appendStatus をクリア
       appendStatusEl.textContent = '';
     }
 
@@ -476,7 +479,6 @@
       status.textContent = '';
       renderSearchSummary(null);
 
-      // ★追加機能14: 検索開始時に「確定・トランシートへの追記」まわりのステータスをクリア
       const selectedInfoEl = qs('selectedInfo');
       const appendStatusEl = qs('appendStatus');
       selectedInfoEl.textContent = '現在、選択されている候補はありません。';

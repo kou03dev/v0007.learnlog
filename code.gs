@@ -1,19 +1,23 @@
 const SHEET_TRAN = 'トラン';           // トラン シート
 const SHEET_REF  = '参照用マスター';   // 参照用マスター シート
 
-// code.gs 全文（mode 1 / mode 2 両方対応）
-
 // AppVer    07
-// DeployVer 35
-// 2026/03/20 21:52:50 "push and clasp push" test
+// DeployVer 38
+// 2026/03/21 11:08:13 
+
+// https://www.perplexity.ai/search/itumooshi-hua-ninarimasu-xue-x-q3xpd5n7Ttq_2.oEWVHG7w
+
+// ◆追加機能16. 
+
+// 画面に画面に表示される文字の大きさなどを少し調整して、
+// 「検索条件」から「選択中の候補をトランに追加」の行までが、
+// Windows PC の Web ブラウザ (例、Brave) で、縦スクロース市内で表示されるように、
+// 文字のフォントサイズなどを少しだけ小さくする、などの調整
+
+// code.gs は、DeployVer 37 から DeployVer 38 へ
+// バージョンアップする際に、ソースコード内の処理ロジックは一切変更なし。
 
 
-// ◆追加機能15. 「出力用の値03」に、※1で示したように、各種項目名と項目値を出力する機能を追加
-// WebAppName_en-US: LearnLogApp
-// WebAppName_ja-JP: 学習記録アプリ
-// WebAppVer: 07
-// DeployVer (Deploy Version Number)
-// DeployDateTime (Deploy を行った日時)
 
 // ◆重要◆
 // 「デプロイ」を実行する前に、
@@ -50,10 +54,6 @@ const APP_META = {
 
 /**
  * Web アプリのエントリポイント
- * ⇒ ここでは DeployVer を増やさず、「最後に登録された DeployVer」を表示に使う。
- *
- * 仕様: URL クエリの mode=1 / mode=2 を取得し、テンプレートに渡す。
- *       1,2 以外または未指定の場合は null として渡し、クライアント側で「2」を初期値とする。
  */
 function doGet(e) {
   const deployInfo = getCurrentDeployInfo_();
@@ -225,13 +225,7 @@ function getMasterAllRows() {
 }
 
 /**
- * 「トラン」シートの末尾行に追記する前に、
- * 必要に応じてシート末尾に行を追加する内部関数。
- *
- * ROW_DIFF 行ぶんの「テンプレート行」をまとめて追加しておき、
- * 実際のデータ書き込みは appendTran 側で 1 行だけ行う想定。
- *
- * 機能追加11: 行追加とコピー処理に要した時間 (ms) を返却情報に含める。
+ * 「トラン」シートの末尾行に追記する前に、必要に応じてシート末尾に行を追加
  */
 function ensureTranRows_() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -239,7 +233,6 @@ function ensureTranRows_() {
 
   const writableLastRow = sheet.getMaxRows();
 
-  // C列ベースの末尾行取得
   const dataLastRow = sheet
     .getRange(1, DATA_COLUMN_INDEX)
     .getNextDataCell(SpreadsheetApp.Direction.DOWN)
@@ -255,7 +248,6 @@ function ensureTranRows_() {
 
     const tStart = new Date().getTime();
 
-    // ROW_DIFF 行追加
     sheet.insertRowsAfter(writableLastRow, ROW_DIFF);
 
     const startRow = writableLastRow + 1;
@@ -317,13 +309,6 @@ function include(filename) {
 
 /**
  * 候補 1 件が確定したときに「トラン」シート末尾に追記
- *
- * 機能追加10: 書き込み所要時間を計測して返す。
- *
- * 機能追加15: 6列目「出力用の値03」に WebApp メタ情報を JSON 形式で出力する。
- *
- * ※ROW_DIFF が 1 より大きい場合でも、ここで書き込むのは 1 行だけ。
- *   不足分のテンプレート行は ensureTranRows_ でまとめて追加される。
  */
 function appendTran(selected) {
   if (!selected || !selected.output01) {
@@ -335,7 +320,6 @@ function appendTran(selected) {
 
   const info = ensureTranRows_();
 
-  // データの最終行も C列ベースで取得
   const lastRow = sheet
     .getRange(1, DATA_COLUMN_INDEX)
     .getNextDataCell(SpreadsheetApp.Direction.DOWN)
@@ -361,7 +345,6 @@ function appendTran(selected) {
   sheet.getRange(nextRow, 4).setValue(selected.output01);
   sheet.getRange(nextRow, 5).setValue(selected.output02);
 
-  // ★追加機能15: 出力用の値03（6列目）に JSON を出力
   const deployInfo = getCurrentDeployInfo_();
   const metaForRow = {
     WebAppName_en_US: APP_META.WebAppName_en_US,
@@ -383,4 +366,3 @@ function appendTran(selected) {
     writeElapsedMs: writeElapsedMs
   };
 }
-
