@@ -5,12 +5,10 @@
     <title><?= fullTitle ?></title>
 <!--
 // AppVer 07
-// DeployVer 43
-// 2026/03/23 18:45:19
-
+// DeployVer 44
+// 2026/03/23 19:11:17
 // https://www.perplexity.ai/search/itumooshi-hua-ninarimasu-xue-x-q3xpd5n7Ttq_2.oEWVHG7w
-
-// ◆(追加機能18B・19B 反映済み)
+// ◆追加機能21. 検索モードの初期値が「1」となっているのを、「2」となるように修正する。
 -->
     <style>
       body {
@@ -390,7 +388,7 @@
       function onSearchClick() {
         const modeInput = document.getElementById('modeInput');
         const queryInput = document.getElementById('queryInput');
-        const mode = Number(modeInput.value) || 1;
+        const mode = Number(modeInput.value) || 2;
         const query = queryInput.value || '';
 
         if (mode !== 1 && mode !== 2) {
@@ -511,7 +509,8 @@
           }
         }
         if (!mode) {
-          mode = 1;
+          // ★デフォルトを「2」に変更 (追加機能21)
+          mode = 2;
         }
         document.getElementById('modeInput').value = String(mode);
 
