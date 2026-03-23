@@ -2,7 +2,7 @@ const SHEET_TRAN = 'トラン';           // トラン シート
 const SHEET_REF  = '参照用マスター';   // 参照用マスター シート
 
 // AppVer 06
-// DeployVer 48
+// DeployVer 49
 // 2026/03/23 22:58:01
 // https://www.perplexity.ai/search/itumooshi-hua-ninarimasu-xue-x-q3xpd5n7Ttq_2.oEWVHG7w
 // ◆追加機能26. 「検索条件クリア」ボタンの廃止
