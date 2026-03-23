@@ -3,15 +3,15 @@
   <head>
     <meta charset="UTF-8">
     <title><?= fullTitle ?></title>
-
 <!--
-// AppVer    07
-// DeployVer 42
-// 2026/03/21 18:27:51
+// AppVer 07
+// DeployVer 43
+// 2026/03/23 18:45:19
 
-// ◆追加機能17、追加機能20
+// https://www.perplexity.ai/search/itumooshi-hua-ninarimasu-xue-x-q3xpd5n7Ttq_2.oEWVHG7w
+
+// ◆(追加機能18B・19B 反映済み)
 -->
-
     <style>
       body {
         font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -89,8 +89,8 @@
     <div class="section">
       <div>
         <label for="modeInput">
-          検索モード（1 または 2 を入力）
-          （「1: mode 1 (都度 GAS で検索)」「2: mode 2 (参照用マスター全件を読み込んでメモリ内検索)」）
+          検索モード (1 または 2 を入力)
+          (「1: mode 1 (都度 GAS で検索)」「2: mode 2 (参照用マスター全件を読み込んでメモリ内検索)」)
         </label>
       </div>
       <div>
@@ -103,7 +103,7 @@
 
     <div class="section">
       <div>
-        <label for="queryInput">検索語句（半角/全角スペースで区切って AND 検索）</label>
+        <label for="queryInput">検索語句 (半角/全角スペースで区切って AND 検索)</label>
       </div>
       <div>
         <input type="text" id="queryInput" style="width: 280px;">
@@ -114,13 +114,13 @@
     </div>
 
     <div class="section" style="font-size:11px; color:#555;">
-      ※1. 半角/全角スペースで区切られたすべての語句を含む行を検索します（AND 条件）。<br>
+      ※1. 半角/全角スペースで区切られたすべての語句を含む行を検索します (AND 条件)。<br>
       ※2. 最大 100 件まで表示。候補をクリックすると選択状態になります。<br>
       ※3. この Web アプリは Google Apps Script と Google スプレッドシート上で動作しています。
     </div>
 
     <div class="section">
-      <strong>候補一覧（クリックで選択）</strong>
+      <strong>候補一覧 (クリックで選択)</strong>
     </div>
 
     <ul id="candidateList"></ul>
@@ -136,23 +136,21 @@
     <div class="section">
       <button id="appendButton">選択中の候補をトランに追加</button>
       <span id="appendStatus" class="status-text">
-        候補一覧（クリックで選択）
+        候補一覧 (クリックで選択)
       </span>
     </div>
 
     <div class="section">
-      <strong>内部ログ（デバッグ用）</strong>
+      <strong>内部ログ (デバッグ用)</strong>
     </div>
 
     <div id="logArea"></div>
 
     <script>
-      // in-memory 用キャッシュ（mode 2）
-      let masterCache = null;       // [{rowIndex, output01, output02}, ...]
-      let currentCandidates = [];   // 画面に表示している候補
+      let masterCache = null;
+      let currentCandidates = [];
       let selectedIndex = -1;
 
-      // 直近の検索結果メタ情報（mode / ヒット件数 / 全件数 / 所要時間 / 開始・終了日時）
       let lastSearchMeta = null;
 
       function getModeFromUrl() {
@@ -263,7 +261,7 @@
             renderCandidates(results || []);
 
             const hitCount = (results || []).length;
-            const allCount = null; // mode1 では全件数は取得していない
+            const allCount = null;
 
             const startStr = formatDateTime(startDateObj);
             const endStr   = formatDateTime(endDateObj);
@@ -314,7 +312,7 @@
           .withSuccessHandler(rows => {
             const end = performance.now();
             masterCache = rows || [];
-            log(`mode 2: 全件取得完了。件数=${masterCache.length}（${(end - start).toFixed(0)} ms）`);
+            log(`mode 2: 全件取得完了。件数=${masterCache.length} (所要時間 ${(end - start).toFixed(0)} ms)`);
             callback(masterCache);
           })
           .withFailureHandler(err => {
@@ -342,7 +340,6 @@
 
         const mode = 2;
         const startDateObj = new Date();
-        const startTimeMs = performance.now();
 
         log('mode 2: in-memory search 実行中...');
 
@@ -456,7 +453,8 @@
                 log(`トランシートへの書き込み所要時間 ${res.writeElapsedMs} ms`);
               }
             } else {
-              const msg = '追記に失敗しました: ' + (res && res.message ? res.message : '理由不明');
+              const msg = '追記に失敗しました: ' +
+                (res && res.message ? res.message : '理由不明');
               document.getElementById('appendStatus').textContent = msg;
               log(msg);
             }
@@ -483,20 +481,20 @@
       function updateAppendStatusFromMeta() {
         const span = document.getElementById('appendStatus');
         if (!lastSearchMeta) {
-          span.textContent = '候補一覧（クリックで選択）';
+          span.textContent = '候補一覧 (クリックで選択)';
           return;
         }
         const m = lastSearchMeta;
         if (m.mode === 2 && typeof m.allCount === 'number') {
           span.textContent =
-            `候補一覧（クリックで選択） (mode ${m.mode}、` +
+            `候補一覧 (クリックで選択) (mode ${m.mode}、` +
             `${m.hitCount} 件ヒット、` +
             `(参照用マスター全) ${m.allCount} 件中、` +
             `検索所要時間 ${m.elapsedMs.toFixed(0)} ms、` +
             `検索処理開始: ${m.startStr}、検索処理終了: ${m.endStr})`;
         } else {
           span.textContent =
-            `候補一覧（クリックで選択） (mode ${m.mode}、` +
+            `候補一覧 (クリックで選択) (mode ${m.mode}、` +
             `${m.hitCount} 件ヒット、` +
             `検索所要時間 ${m.elapsedMs.toFixed(0)} ms、` +
             `検索処理開始: ${m.startStr}、検索処理終了: ${m.endStr})`;

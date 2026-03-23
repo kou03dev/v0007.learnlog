@@ -1,19 +1,28 @@
 const SHEET_TRAN = 'トラン';           // トラン シート
 const SHEET_REF  = '参照用マスター';   // 参照用マスター シート
 
-// AppVer    07
-// DeployVer 42
-// 2026/03/21 18:27:51
+// AppVer 07
+// DeployVer 43
+// 2026/03/23 18:45:19
 
-// ◆追加機能17、追加機能20
-// （略：コメントは元のまま残しています）
+// https://www.perplexity.ai/search/itumooshi-hua-ninarimasu-xue-x-q3xpd5n7Ttq_2.oEWVHG7w
+
+// ◆(追加機能18A・19A 反映済み)
+
+// 画面に画面に表示される文字の大きさなどを少し調整して、
+// 「検索条件」から「選択中の候補をトランに追加」の行までが、
+// Windows PC の Web ブラウザ (例、Brave) で、縦スクロールしないで表示されるように、
+// 文字のフォントサイズなどを少しだけ小さくする、などの調整
+
+// code.gs は、DeployVer 37 から DeployVer 39 へ
+// バージョンアップする際に、ソースコード内の処理ロジックは一切変更なし。
 
 // ◆重要◆
 // 「デプロイ」を実行する前に、
 // 必ず code.gs の「prepareNewDeploy (関数)」をドロップダウンリストボックスから選択して、「実行」ボタンを押す。
 // →「prepareNewDeploy (関数)」を実行することで、DeployVer が + 1 されます。
 
-// ★ 手入力で管理するアプリのバージョン（AppVer）
+// ★ 手入力で管理するアプリのバージョン (AppVer)
 const APP_VER = '07';
 const APP_BASE_NAME = `学習記録WebApp(AppVer${APP_VER})`;
 
@@ -28,9 +37,10 @@ const PROP_DEPLOY_LOG      = 'APP_DEPLOY_LOG';       // テキスト履歴
 // Sheet のデータが入力済みの行 (A とする) を調べて、
 // Sheet の max の行 (B とする) と比較する。
 // B - A の差が n 以内なら、行を追加する。
+// const ROW_DIFF = 1;
 const ROW_DIFF = 5;
 
-// 「データが記入済みかどうか」を判定する基準となる列（ここでは C 列）
+// 「データが記入済みかどうか」を判定する基準となる列 (ここでは C 列)
 const DATA_COLUMN_INDEX = 3;
 
 // 「出力用の値03」に出力する共通メタ情報
@@ -62,7 +72,7 @@ function doGet(e) {
   template.fullTitle      = fullTitle;
   template.initialMode    = initialMode;
 
-  // ★ 追加機能17: 画面読み込み実施日時（または再読み込み実施日時）
+  // 画面読み込み実施日時
   const now = new Date();
   template.pageLoadDateTime = Utilities.formatDate(
     now,
@@ -138,7 +148,7 @@ function logDeployToSheet_(no, datetime) {
 }
 
 /**
- * 参照用マスターから「自由語句の AND 条件」で候補を検索（mode 1）
+ * 参照用マスターから「自由語句の AND 条件」で候補を検索 (mode 1)
  */
 function searchMasterByTerms(terms) {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -150,7 +160,7 @@ function searchMasterByTerms(terms) {
 
   const values = sheet.getRange(2, 1, lastRow - 1, lastCol).getValues();
 
-  const targetColIndexes = [0, 1]; // A,B列
+  const targetColIndexes = [0, 1]; // A, B 列
 
   const normTerms = (terms || [])
     .map(t => (t || '').toString().trim())
@@ -187,7 +197,7 @@ function searchMasterByTerms(terms) {
 }
 
 /**
- * 互換用：単一語句検索
+ * 互換用: 単一語句検索
  */
 function searchMaster(query) {
   query = (query || '').toString().trim();
@@ -281,14 +291,14 @@ function ensureTranRows_() {
     rowAppendElapsedMs = tEnd - tStart;
 
     message =
-      `『トラン』シートの「C列」にデータが記載されている末尾の行が (${dataLastRow})、` +
-      `シートの記入可能な末尾の行の番号 (${writableLastRow}) の値と比較して「` + ROW_DIFF + `」以内であるため、` +
-      `『トラン』シートへ「` + ROW_DIFF + `」行追加しました。` +
+      `『トラン』シートの「C 列」にデータが記載されている末尾の行が (${dataLastRow})、` +
+      `シートの記入可能な末尾の行の番号 (${writableLastRow}) の値と比較して「${ROW_DIFF}」以内であるため、` +
+      `『トラン』シートへ「${ROW_DIFF}」行追加しました。` +
       ` (行追加所要時間 ${rowAppendElapsedMs} ms)`;
   } else {
     message =
-      `『トラン』シートの「C列」にデータが記載されている末尾の行が (${dataLastRow})、` +
-      `シートの記入可能な末尾の行の番号 (${writableLastRow}) の値と比較して「` + ROW_DIFF + `」以内ではないため、` +
+      `『トラン』シートの「C 列」にデータが記載されている末尾の行が (${dataLastRow})、` +
+      `シートの記入可能な末尾の行の番号 (${writableLastRow}) の値と比較して「${ROW_DIFF}」以内ではないため、` +
       `『トラン』シートへ行の追加処理は不要です。` +
       ` (行追加所要時間 ${rowAppendElapsedMs} ms)`;
   }
