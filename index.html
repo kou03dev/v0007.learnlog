@@ -6,12 +6,9 @@
     <!--
     // AppVer 06
     // DeployVer 47
-    // 2026/03/23 22:15:01
+    // 2026/03/23 22:58:01
     // https://www.perplexity.ai/search/itumooshi-hua-ninarimasu-xue-x-q3xpd5n7Ttq_2.oEWVHG7w
-    // ◆追加機能25. (特に Windows PC 上で) 画面を縦スクロールをしないままで
-    //    「検索」と候補一覧の中から候補を一つ選び、
-    //    「選択中の候補をトランに追加」の操作が実現できるように、
-    //    画面デザインを変更する。
+    // ◆追加機能26. 「検索条件クリア」ボタンの廃止
     -->
     <style>
       body {
@@ -55,7 +52,6 @@
       button:hover:not(:disabled) {
         background-color: #1565c0;
       }
-      /* 追加機能25: 候補一覧の高さとフォントサイズを少しだけ小さくして縦方向を節約 */
       #candidateList {
         border: 1px solid #ccc;
         padding: 1px;
@@ -125,7 +121,6 @@
       <div>
         <input type="text" id="queryInput" style="width: 280px;">
         <button id="searchButton">検索</button>
-        <button id="clearButton">検索条件クリア</button>
         <span id="searchStatus" class="status-text"></span>
       </div>
     </div>
@@ -435,15 +430,6 @@
         }
       }
 
-      function onClearClick() {
-        document.getElementById('queryInput').value = '';
-        clearCandidates();
-        document.getElementById('searchStatus').textContent = '';
-        lastSearchMeta = null;
-        updateAppendStatusFromMeta();
-        log('検索条件をクリアしました。');
-      }
-
       function onAppendClick() {
         if (selectedIndex < 0 || selectedIndex >= currentCandidates.length) {
           log('候補が選択されていません。');
@@ -533,7 +519,6 @@
         document.getElementById('modeInput').value = String(mode);
 
         document.getElementById('searchButton').addEventListener('click', onSearchClick);
-        document.getElementById('clearButton').addEventListener('click', onClearClick);
         document.getElementById('appendButton').addEventListener('click', onAppendClick);
 
         document.getElementById('queryInput').addEventListener('keydown', (event) => {
