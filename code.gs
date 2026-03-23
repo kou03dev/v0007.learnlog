@@ -1,17 +1,14 @@
 const SHEET_TRAN = 'トラン';           // トラン シート
 const SHEET_REF  = '参照用マスター';   // 参照用マスター シート
 
-// AppVer 07
-// DeployVer 45
-// 2026/03/23 19:31:43
+// AppVer 06
+// DeployVer 47
+// 2026/03/23 22:15:01
 // https://www.perplexity.ai/search/itumooshi-hua-ninarimasu-xue-x-q3xpd5n7Ttq_2.oEWVHG7w
-// ◆追加機能23. 検索語句の入力欄に、Windows PC やスマホ (iPhone など) で文字を入力して 
-//   Windows PC で「Enter」キーを押すしたりスマホで「改行」ボタンを押すと、
-//   「検索」ボタンをマウスでクリックするか、スマホで指で「検索」ボタンを押下したときと同じように、
-//    検索処理を開始する機能が失われているので、機能を復活させる。
-// ◆追加機能24. UI (ボタンの色) の修正
-//   「検索」ボタンや「選択中の候補をトランに追加」ボタンが背景色が灰色となっている。
-//   過去のバージョンのようにこれら 2 つのボタンの背景色を灰色から青色に修正する。
+// ◆追加機能25. (特に Windows PC 上で) 画面を縦スクロールをしないままで
+//    「検索」と候補一覧の中から候補を一つ選び、
+//    「選択中の候補をトランに追加」の操作が実現できるように、
+//    画面デザインを変更する。
 
 // ◆重要◆
 // 「デプロイ」を実行する前に、
@@ -19,7 +16,7 @@ const SHEET_REF  = '参照用マスター';   // 参照用マスター シート
 // →「prepareNewDeploy (関数)」を実行することで、DeployVer が + 1 されます。
 
 // ★ 手入力で管理するアプリのバージョン (AppVer)
-const APP_VER = '07';
+const APP_VER = '06';
 const APP_BASE_NAME = `学習記録WebApp(AppVer${APP_VER})`;
 
 // ★ Deploy バージョン情報とログの保存先
@@ -68,7 +65,6 @@ function doGet(e) {
   template.fullTitle      = fullTitle;
   template.initialMode    = initialMode;
 
-  // 画面読み込み実施日時
   const now = new Date();
   template.pageLoadDateTime = Utilities.formatDate(
     now,

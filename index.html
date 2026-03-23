@@ -3,19 +3,16 @@
   <head>
     <meta charset="UTF-8">
     <title><?= fullTitle ?></title>
-<!--
-// AppVer 07
-// DeployVer 45
-// 2026/03/23 19:31:43
-// https://www.perplexity.ai/search/itumooshi-hua-ninarimasu-xue-x-q3xpd5n7Ttq_2.oEWVHG7w
-// ◆追加機能23. 検索語句の入力欄に、Windows PC やスマホ (iPhone など) で文字を入力して 
-//   Windows PC で「Enter」キーを押すしたりスマホで「改行」ボタンを押すと、
-//   「検索」ボタンをマウスでクリックするか、スマホで指で「検索」ボタンを押下したときと同じように、
-//    検索処理を開始する機能が失われているので、機能を復活させる。
-// ◆追加機能24. UI (ボタンの色) の修正
-//   「検索」ボタンや「選択中の候補をトランに追加」ボタンが背景色が灰色となっている。
-//   過去のバージョンのようにこれら 2 つのボタンの背景色を灰色から青色に修正する。
--->
+    <!--
+    // AppVer 06
+    // DeployVer 47
+    // 2026/03/23 22:15:01
+    // https://www.perplexity.ai/search/itumooshi-hua-ninarimasu-xue-x-q3xpd5n7Ttq_2.oEWVHG7w
+    // ◆追加機能25. (特に Windows PC 上で) 画面を縦スクロールをしないままで
+    //    「検索」と候補一覧の中から候補を一つ選び、
+    //    「選択中の候補をトランに追加」の操作が実現できるように、
+    //    画面デザインを変更する。
+    -->
     <style>
       body {
         font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -44,8 +41,8 @@
         font-size: 13px;
         margin-left: 4px;
         padding: 2px 8px;
-        background-color: #1976d2;   /* 追加機能24: 青色 */
-        color: #ffffff;              /* 追加機能24: 白文字 */
+        background-color: #1976d2;
+        color: #ffffff;
         border: 1px solid #1565c0;
         border-radius: 3px;
         cursor: pointer;
@@ -58,16 +55,18 @@
       button:hover:not(:disabled) {
         background-color: #1565c0;
       }
+      /* 追加機能25: 候補一覧の高さとフォントサイズを少しだけ小さくして縦方向を節約 */
       #candidateList {
         border: 1px solid #ccc;
-        padding: 2px;
-        height: 140px;
+        padding: 1px;
+        height: 110px;
         overflow-y: auto;
         list-style: none;
         margin: 2px 0;
+        font-size: 12px;
       }
       #candidateList li {
-        padding: 1px 2px;
+        padding: 1px 1px;
         cursor: pointer;
       }
       #candidateList li:hover {
@@ -537,7 +536,6 @@
         document.getElementById('clearButton').addEventListener('click', onClearClick);
         document.getElementById('appendButton').addEventListener('click', onAppendClick);
 
-        // 追加機能23: 検索語句入力欄で Enter / 改行キー押下時に検索実行
         document.getElementById('queryInput').addEventListener('keydown', (event) => {
           if (event.key === 'Enter') {
             event.preventDefault();
