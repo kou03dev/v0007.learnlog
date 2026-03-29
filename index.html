@@ -5,10 +5,16 @@
     <title><?= fullTitle ?></title>
     <!--
     // AppVer 06
-    // DeployVer 49
-    // 2026/03/23 22:58:01
+    // DeployVer 50
+    // 2026/03/29 16:08:01
     // https://www.perplexity.ai/search/itumooshi-hua-ninarimasu-xue-x-q3xpd5n7Ttq_2.oEWVHG7w
-    // ◆追加機能26. 「検索条件クリア」ボタンの廃止
+    // ◆追加機能27. 「検索」ボタンを押した後に実行する処理の追加 (以下 3 つの処理を追加する)
+    //   ▼27-01.  「検索」ボタンを押したら、「確定」・「トランシートへの追記」付近のステータス欄に表示されるべき文字列を長さ 0 の文字列に変更する機能を追加
+    //   ▼27-02. 「検索」ボタンを押したら、「選択中の候補をトランに追加」ボタン付近のステータス欄に表示されるべき文字列を長さ 0 の文字列に変更する機能を追加
+    //   ▼27-03. 「検索」ボタンを押したら、「選択中の候補をトランに追加」ボタンを特定の条件下において非活性化 (グレーアウトしてボタンを押せないようにする、押しても反応しないようにする) する機能の追加
+    // 
+    // ◆追加機能28.「候補一覧」内の候補の一つ以上を選択された後に実行する処理の追加
+    // 「候補一覧」内の候補の一つ以上を選択された後に、「選択中の候補をトランに追加」ボタンを、活性化 (グレーアウトを解除して、ボタンを押せるようにする)
     -->
     <style>
       body {
@@ -146,7 +152,7 @@
     </div>
 
     <div class="section">
-      <button id="appendButton">選択中の候補をトランに追加</button>
+      <button id="appendButton" disabled>選択中の候補をトランに追加</button>
       <span id="appendStatus" class="status-text">
         候補一覧 (クリックで選択)
       </span>
@@ -193,6 +199,7 @@
         selectedIndex = -1;
         document.getElementById('selectedInfo').textContent =
           '現在、選択されている候補はありません。';
+        document.getElementById('appendButton').disabled = true;
       }
 
       function renderCandidates(list) {
@@ -210,6 +217,7 @@
             const s = currentCandidates[idx];
             document.getElementById('selectedInfo').textContent =
               `選択中の候補: ${s.output01} / ${s.output02}`;
+            document.getElementById('appendButton').disabled = false;
           });
           ul.appendChild(li);
         });
@@ -405,6 +413,10 @@
         const mode = Number(modeInput.value) || 2;
         const query = queryInput.value || '';
 
+        document.getElementById('selectedInfo').textContent = '';
+        document.getElementById('appendStatus').textContent = '';
+        document.getElementById('appendButton').disabled = true;
+
         if (mode !== 1 && mode !== 2) {
           log('モードは 1 または 2 を指定してください。');
           document.getElementById('searchStatus').textContent =
@@ -517,6 +529,7 @@
           mode = 2;
         }
         document.getElementById('modeInput').value = String(mode);
+        document.getElementById('appendButton').disabled = true;
 
         document.getElementById('searchButton').addEventListener('click', onSearchClick);
         document.getElementById('appendButton').addEventListener('click', onAppendClick);
