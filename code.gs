@@ -2,7 +2,7 @@ const SHEET_TRAN = 'トラン';           // トラン シート
 const SHEET_REF  = '参照用マスター';   // 参照用マスター シート
 
 // AppVer 06
-// DeployVer 53
+// DeployVer 55
 // 2026/03/29 22:11:01
 // https://www.perplexity.ai/search/itumooshi-hua-ninarimasu-xue-x-q3xpd5n7Ttq_2.oEWVHG7w
 // ◆追加機能31. 「選択中の候補をトランに追加」ボタン押下時の処理の追加
