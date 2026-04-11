@@ -4,10 +4,9 @@ const SHEET_REF  = '参照用マスター';   // 参照用マスター シート
 // AppVer 06
 // DeployVer 51
 // 2026/03/29 22:11:01
-// https://www.perplexity.ai/search/itumooshi-hua-ninarimasu-xue-x-q3xpd5n7Ttq_2.oEWVHG7w
-// ◆追加機能29. 「選択中の候補をトランに追加」ボタン右側に表示されている、処理ステータス文字列に関して、以下のように仕様を変更する。
+// [https://www.perplexity.ai/search/itumooshi-hua-ninarimasu-xue-x-q3xpd5n7Ttq_2.oEWVHG7w](https://www.perplexity.ai/search/itumooshi-hua-ninarimasu-xue-x-q3xpd5n7Ttq_2.oEWVHG7w)
+// ◆追加機能30. 「選択中の候補をトランに追加」ボタン右側に表示されている、処理ステータス文字列に関して、以下のように仕様を変更する。
 // ▼29-01. 「候補一覧」内に表示されている候補を一つ以上選択 (クリック・タップ) すると、「選択中の候補をトランに追加」ボタン右側に表示されている、処理ステータス文字列をクリア (長さ 0 の文字列にする) する機能を追加
-
 
 // ◆重要◆
 // 「デプロイ」を実行する前に、
@@ -333,10 +332,10 @@ function appendTran(selected) {
   const tStartWrite = new Date().getTime();
 
   sheet.getRange(nextRow, 1).setFormula(
-    '=HYPERLINK("#gid=316040792&range=C" & MAX(FILTER(ROW(C:C),C:C<>"" )), "C列の最終データへ")'
+    '=HYPERLINK("#gid=316040792&range=C" & MAX(FILTER(ROW(C:C),C:C<>"")), "C列の最終データへ")'
   );
   sheet.getRange(nextRow, 2).setFormula(
-    '=HYPERLINK("#gid=316040792&range=C" & MIN(FILTER(ROW(C:C),C:C<>"" )), "C列の先頭データへ")'
+    '=HYPERLINK("#gid=316040792&range=C" & MIN(FILTER(ROW(C:C),C:C<>"")), "C列の先頭データへ")'
   );
   sheet.getRange(nextRow, 3).setValue(formatted);
   sheet.getRange(nextRow, 4).setValue(selected.output01);

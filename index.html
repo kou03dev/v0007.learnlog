@@ -1,544 +1,464 @@
+<!--
+// AppVer 06
+// DeployVer 51
+// 2026/03/29 22:11:01
+// [https://www.perplexity.ai/search/itumooshi-hua-ninarimasu-xue-x-q3xpd5n7Ttq_2.oEWVHG7w](https://www.perplexity.ai/search/itumooshi-hua-ninarimasu-xue-x-q3xpd5n7Ttq_2.oEWVHG7w)
+// ◆追加機能30. 「選択中の候補をトランに追加」ボタン右側に表示されている、処理ステータス文字列に関して、以下のように仕様を変更する。
+// ▼29-01. 「候補一覧」内に表示されている候補を一つ以上選択 (クリック・タップ) すると、「選択中の候補をトランに追加」ボタン右側に表示されている、処理ステータス文字列をクリア (長さ 0 の文字列にする) する機能を追加
+-->
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8">
-    <title><?= fullTitle ?></title>
-    <!--
-    // AppVer 06
-    // DeployVer 51
-    // 2026/03/29 22:11:01
-    // https://www.perplexity.ai/search/itumooshi-hua-ninarimasu-xue-x-q3xpd5n7Ttq_2.oEWVHG7w
-    // ◆追加機能29. 「選択中の候補をトランに追加」ボタン右側に表示されている、処理ステータス文字列に関して、以下のように仕様を変更する。
-    // ▼29-01. 「候補一覧」内に表示されている候補を一つ以上選択 (クリック・タップ) すると、「選択中の候補をトランに追加」ボタン右側に表示されている、処理ステータス文字列をクリア (長さ 0 の文字列にする) する機能を追加
-    -->
-    <style>
-      body {
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-        font-size: 13px;
-        margin: 8px 12px;
-      }
-      h1 {
-        font-size: 18px;
-        margin: 0 0 4px 0;
-      }
-      h2 {
-        font-size: 14px;
-        margin: 8px 0 4px 0;
-      }
-      .section {
-        margin-bottom: 4px;
-      }
-      label {
-        display: inline-block;
-        margin-right: 4px;
-      }
-      input[type="text"], input[type="number"] {
-        font-size: 13px;
-      }
-      button {
-        font-size: 13px;
-        margin-left: 4px;
-        padding: 2px 8px;
-        background-color: #1976d2;
-        color: #ffffff;
-        border: 1px solid #1565c0;
-        border-radius: 3px;
-        cursor: pointer;
-      }
-      button:disabled {
-        background-color: #9e9e9e;
-        border-color: #9e9e9e;
-        cursor: default;
-      }
-      button:hover:not(:disabled) {
-        background-color: #1565c0;
-      }
-      #candidateList {
-        border: 1px solid #ccc;
-        padding: 1px;
-        height: 110px;
-        overflow-y: auto;
-        list-style: none;
-        margin: 2px 0;
-        font-size: 12px;
-      }
-      #candidateList li {
-        padding: 1px 1px;
-        cursor: pointer;
-      }
-      #candidateList li:hover {
-        background-color: #eef;
-      }
-      #logArea {
-        border: 1px solid #ccc;
-        padding: 4px;
-        height: 160px;
-        overflow: auto;
-        background-color: #f9f9f9;
-        white-space: pre-wrap;
-        font-size: 11px;
-        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      }
-      .status-text {
-        font-size: 11px;
-        color: #333;
-        margin-left: 4px;
-      }
-    </style>
-  </head>
-  <body>
-    <h1><?= appBaseName ?></h1>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <base target="_top">
+  <title><?= fullTitle ?></title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 16px;
+      line-height: 1.5;
+    }
 
-    <div class="section">
-      AppVer: <?= appVer ?>
-      / DeployVer: <?= deployNo ?>
-      / Deploy日時: <?= deployDateTime ?>
-      / 画面読み込み実施日時: <?= pageLoadDateTime ?>
+    h1 {
+      margin: 0 0 8px;
+      font-size: 24px;
+    }
+
+    .meta {
+      margin-bottom: 16px;
+      font-size: 13px;
+      color: #444;
+      word-break: break-all;
+    }
+
+    .panel {
+      border: 1px solid #ccc;
+      padding: 12px;
+      margin-bottom: 16px;
+      border-radius: 8px;
+    }
+
+    .row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    input[type="text"] {
+      padding: 6px 8px;
+      font-size: 14px;
+    }
+
+    #modeInput {
+      width: 60px;
+    }
+
+    #queryInput {
+      width: 360px;
+      max-width: 100%;
+    }
+
+    button {
+      padding: 8px 12px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .note {
+      font-size: 13px;
+      color: #555;
+      margin-top: 4px;
+    }
+
+    .candidate-list {
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 8px;
+      min-height: 80px;
+      max-height: 320px;
+      overflow-y: auto;
+      background: #fff;
+    }
+
+    .candidate-item {
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      user-select: none;
+      background: #fafafa;
+    }
+
+    .candidate-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .candidate-item.selected {
+      background: #dbeafe;
+      border-color: #60a5fa;
+    }
+
+    .candidate-main {
+      font-weight: bold;
+      margin-bottom: 4px;
+      word-break: break-word;
+    }
+
+    .candidate-sub {
+      font-size: 13px;
+      color: #555;
+      word-break: break-word;
+    }
+
+    .selected-box {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background: #fff;
+      min-height: 48px;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .status-text {
+      font-size: 13px;
+      color: #333;
+      word-break: break-word;
+    }
+
+    #logArea {
+      width: 100%;
+      height: 220px;
+      font-family: Consolas, monospace;
+      font-size: 12px;
+      box-sizing: border-box;
+    }
+  </style>
+</head>
+<body>
+  <h1><?= appBaseName ?></h1>
+
+  <div class="meta">
+    AppVer: <?= appVer ?> / DeployVer: <?= deployNo ?> / Deploy日時: <?= deployDateTime ?> / 画面読み込み実施日時: <?= pageLoadDateTime ?>
+  </div>
+
+  <div class="panel">
+    <div><strong>検索条件</strong></div>
+
+    <div class="row" style="margin-top:8px;">
+      <label for="modeInput">検索モード</label>
+      <input id="modeInput" type="text" inputmode="numeric" maxlength="1" autocomplete="off">
+      <span>(1 または 2 を入力) (「1: mode 1 (都度 GAS で検索)」「2: mode 2 (参照用マスター全件を読み込んでメモリ内検索)」)</span>
     </div>
 
-    <div class="section">
-      <strong>検索条件</strong>
+    <div class="note">
+      URL で ?mode=1 または ?mode=2 を付けて開くと、そのモードが初期値になります。
     </div>
 
-    <div class="section">
-      <div>
-        <label for="modeInput">
-          検索モード (1 または 2 を入力)
-          (「1: mode 1 (都度 GAS で検索)」「2: mode 2 (参照用マスター全件を読み込んでメモリ内検索)」)
-        </label>
-      </div>
-      <div>
-        <input type="number" id="modeInput" min="1" max="2" step="1" style="width: 40px;">
-        <span style="font-size:11px; color:#555;">
-          URL で ?mode=1 または ?mode=2 を付けて開くと、そのモードが初期値になります。
-        </span>
-      </div>
+    <div class="row" style="margin-top:12px;">
+      <label for="queryInput">検索語句</label>
+      <input id="queryInput" type="text" autocomplete="off" placeholder="半角/全角スペースで区切って AND 検索">
+      <button id="searchBtn" type="button">検索</button>
     </div>
 
-    <div class="section">
-      <div>
-        <label for="queryInput">検索語句 (半角/全角スペースで区切って AND 検索)</label>
-      </div>
-      <div>
-        <input type="text" id="queryInput" style="width: 280px;">
-        <button id="searchButton">検索</button>
-        <span id="searchStatus" class="status-text"></span>
-      </div>
-    </div>
-
-    <div class="section" style="font-size:11px; color:#555;">
+    <div class="note">
       ※1. 半角/全角スペースで区切られたすべての語句を含む行を検索します (AND 条件)。<br>
       ※2. 最大 100 件まで表示。候補をクリックすると選択状態になります。<br>
       ※3. この Web アプリは Google Apps Script と Google スプレッドシート上で動作しています。
     </div>
+  </div>
 
-    <div class="section">
-      <strong>候補一覧 (クリックで選択)</strong>
+  <div class="panel">
+    <div><strong>候補一覧 (クリックで選択)</strong></div>
+    <div id="candidateList" class="candidate-list" style="margin-top:8px;"></div>
+  </div>
+
+  <div class="panel">
+    <div><strong>確定・トランシートへの追記</strong></div>
+
+    <div id="selectedInfo" class="selected-box" style="margin-top:8px;">現在、選択されている候補はありません。</div>
+
+    <div class="row" style="margin-top:12px;">
+      <button id="appendBtn" type="button">選択中の候補をトランに追加</button>
+      <span id="statusText" class="status-text"></span>
     </div>
+  </div>
 
-    <ul id="candidateList"></ul>
+  <div class="panel">
+    <div><strong>候補一覧 (クリックで選択)</strong></div>
+    <textarea id="logArea" readonly></textarea>
+    <div class="note">内部ログ (デバッグ用)</div>
+  </div>
 
-    <div class="section">
-      <strong>確定・トランシートへの追記</strong>
-    </div>
+  <script>
+    const INITIAL_MODE = <?=
+      initialMode === null ? 'null' : JSON.stringify(initialMode)
+    ?>;
 
-    <div class="section" id="selectedInfo" style="font-size:12px;">
-      現在、選択されている候補はありません。
-    </div>
+    let currentMode = INITIAL_MODE || '1';
+    let allRowsMode2 = null;
+    let currentCandidates = [];
+    let selectedCandidate = null;
 
-    <div class="section">
-      <button id="appendButton" disabled>選択中の候補をトランに追加</button>
-      <span id="appendStatus" class="status-text">
-        候補一覧 (クリックで選択)
-      </span>
-    </div>
+    const modeInput = document.getElementById('modeInput');
+    const queryInput = document.getElementById('queryInput');
+    const searchBtn = document.getElementById('searchBtn');
+    const candidateList = document.getElementById('candidateList');
+    const selectedInfo = document.getElementById('selectedInfo');
+    const appendBtn = document.getElementById('appendBtn');
+    const statusText = document.getElementById('statusText');
+    const logArea = document.getElementById('logArea');
 
-    <div class="section">
-      <strong>内部ログ (デバッグ用)</strong>
-    </div>
+    function log(message) {
+      const now = new Date();
+      const yyyy = now.getFullYear();
+      const MM = String(now.getMonth() + 1).padStart(2, '0');
+      const dd = String(now.getDate()).padStart(2, '0');
+      const hh = String(now.getHours()).padStart(2, '0');
+      const mm = String(now.getMinutes()).padStart(2, '0');
+      const ss = String(now.getSeconds()).padStart(2, '0');
+      const line = `[${yyyy}/${MM}/${dd} ${hh}:${mm}:${ss}] ${message}`;
+      logArea.value += (logArea.value ? '\n' : '') + line;
+      logArea.scrollTop = logArea.scrollHeight;
+    }
 
-    <div id="logArea"></div>
+    function setStatus(message) {
+      statusText.textContent = message || '';
+    }
 
-    <script>
-      let masterCache = null;
-      let currentCandidates = [];
-      let selectedIndex = -1;
+    function clearStatus() {
+      statusText.textContent = '';
+    }
 
-      let lastSearchMeta = null;
+    function normalizeModeInput(value) {
+      const v = String(value || '').trim();
+      if (v === '1' || v === '2') return v;
+      return '';
+    }
 
-      function getModeFromUrl() {
-        const params = new URLSearchParams(window.location.search);
-        const modeStr = params.get('mode');
-        const n = modeStr ? Number(modeStr) : NaN;
-        return (n === 1 || n === 2) ? n : null;
+    function tokenizeQuery(text) {
+      return String(text || '')
+        .trim()
+        .split(/[\s　]+/)
+        .map(s => s.trim())
+        .filter(Boolean);
+    }
+
+    function updateSelectedInfo() {
+      if (!selectedCandidate) {
+        selectedInfo.textContent = '現在、選択されている候補はありません。';
+        return;
       }
 
-      function setModeToUrl(mode) {
-        const url = new URL(window.location.href);
-        url.searchParams.set('mode', String(mode));
-        history.replaceState(null, '', url.toString());
+      const output01 = selectedCandidate.output01 != null ? String(selectedCandidate.output01) : '';
+      const output02 = selectedCandidate.output02 != null ? String(selectedCandidate.output02) : '';
+
+      selectedInfo.textContent =
+        'output01: ' + output01 + '\n' +
+        'output02: ' + output02;
+    }
+
+    function renderCandidates(list) {
+      candidateList.innerHTML = '';
+      currentCandidates = Array.isArray(list) ? list.slice() : [];
+
+      if (!currentCandidates.length) {
+        const empty = document.createElement('div');
+        empty.textContent = '候補はありません。';
+        candidateList.appendChild(empty);
+        return;
       }
 
-      function log(message) {
-        const area = document.getElementById('logArea');
-        const now = new Date();
-        const ts = now.toLocaleString();
-        area.textContent += `[${ts}] ${message}\n`;
-        area.scrollTop = area.scrollHeight;
-      }
+      currentCandidates.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = 'candidate-item' + (
+          selectedCandidate &&
+          selectedCandidate.rowIndex === item.rowIndex &&
+          selectedCandidate.output01 === item.output01 &&
+          selectedCandidate.output02 === item.output02
+            ? ' selected'
+            : ''
+        );
 
-      function clearCandidates() {
-        const ul = document.getElementById('candidateList');
-        ul.innerHTML = '';
-        currentCandidates = [];
-        selectedIndex = -1;
-        document.getElementById('selectedInfo').textContent =
-          '現在、選択されている候補はありません。';
-        document.getElementById('appendButton').disabled = true;
-      }
+        const main = document.createElement('div');
+        main.className = 'candidate-main';
+        main.textContent = item.output01 != null ? String(item.output01) : '';
 
-      function renderCandidates(list) {
-        clearCandidates();
-        const ul = document.getElementById('candidateList');
-        list.forEach((item, idx) => {
-          const li = document.createElement('li');
-          li.textContent = `${item.output01} / ${item.output02}`;
-          li.dataset.index = String(idx);
-          li.addEventListener('click', () => {
-            selectedIndex = idx;
-            Array.from(ul.children).forEach((li2, j) => {
-              li2.style.backgroundColor = (j === idx) ? '#cceeff' : '';
-            });
-            const s = currentCandidates[idx];
-            document.getElementById('selectedInfo').textContent =
-              `選択中の候補: ${s.output01} / ${s.output02}`;
-            document.getElementById('appendStatus').textContent = '';
-            document.getElementById('appendButton').disabled = false;
-          });
-          ul.appendChild(li);
-        });
-        currentCandidates = list;
-      }
+        const sub = document.createElement('div');
+        sub.className = 'candidate-sub';
+        sub.textContent = item.output02 != null ? String(item.output02) : '';
 
-      function filterByTerms(sourceList, query) {
-        const terms = (query || '')
-          .toString()
-          .split(/[\s\u3000]+/)
-          .map(t => t.trim())
-          .filter(t => t.length > 0)
-          .map(t => t.toLowerCase());
+        div.appendChild(main);
+        div.appendChild(sub);
 
-        if (terms.length === 0) return [];
-
-        const results = [];
-        for (let i = 0; i < sourceList.length; i++) {
-          const row = sourceList[i];
-          const targetText = [
-            row.output01 != null ? String(row.output01) : '',
-            row.output02 != null ? String(row.output02) : ''
-          ].join(' ').toLowerCase();
-
-          const ok = terms.every(term => targetText.indexOf(term) !== -1);
-          if (!ok) continue;
-
-          results.push(row);
-          if (results.length >= 100) break;
-        }
-        return results;
-      }
-
-      function searchMode1(query) {
-        const terms = (query || '')
-          .toString()
-          .split(/[\s\u3000]+/)
-          .map(t => t.trim())
-          .filter(t => t.length > 0);
-
-        if (terms.length === 0) {
-          log('検索語句が空です。');
-          renderCandidates([]);
-          document.getElementById('searchStatus').textContent = '';
-          lastSearchMeta = null;
-          return;
-        }
-
-        const mode = 1;
-        const startDateObj = new Date();
-        const startTimeMs = performance.now();
-
-        log('mode 1: traditional search (GAS) 実行中...');
-
-        google.script.run
-          .withSuccessHandler(results => {
-            const endTimeMs = performance.now();
-            const endDateObj = new Date();
-            const elapsedMs = endTimeMs - startTimeMs;
-
-            renderCandidates(results || []);
-
-            const hitCount = (results || []).length;
-            const allCount = null;
-
-            const startStr = formatDateTime(startDateObj);
-            const endStr   = formatDateTime(endDateObj);
-
-            lastSearchMeta = {
-              mode,
-              hitCount,
-              allCount,
-              elapsedMs,
-              startStr,
-              endStr
-            };
-
-            const statusText =
-              `${hitCount} 件ヒット (最大 100 件まで表示)` +
-              ` (mode ${mode}、${hitCount} 件ヒット、` +
-              `検索所要時間 ${elapsedMs.toFixed(0)} ms、` +
-              `検索処理開始: ${startStr}、検索処理終了: ${endStr})`;
-
-            document.getElementById('searchStatus').textContent = statusText;
-
-            log(
-              `mode 1: ${hitCount} 件ヒット、` +
-              `検索所要時間 ${elapsedMs.toFixed(0)} ms、` +
-              `検索処理開始: ${startStr}、検索処理終了: ${endStr}`
-            );
-
-            updateAppendStatusFromMeta();
-          })
-          .withFailureHandler(err => {
-            log('mode 1: エラー: ' + err.message);
-            document.getElementById('searchStatus').textContent =
-              'mode 1 の検索でエラーが発生しました。';
-            lastSearchMeta = null;
-            updateAppendStatusFromMeta();
-          })
-          .searchMasterByTerms(terms);
-      }
-
-      function ensureMasterCache(callback) {
-        if (masterCache && Array.isArray(masterCache)) {
-          callback(masterCache);
-          return;
-        }
-        log('mode 2: 参照用マスター全件を取得中 (初回のみ)...');
-        const start = performance.now();
-        google.script.run
-          .withSuccessHandler(rows => {
-            const end = performance.now();
-            masterCache = rows || [];
-            log(`mode 2: 全件取得完了。件数=${masterCache.length} (所要時間 ${(end - start).toFixed(0)} ms)`);
-            callback(masterCache);
-          })
-          .withFailureHandler(err => {
-            log('mode 2: 全件取得エラー: ' + err.message);
-            callback([]);
-          })
-          .getMasterAllRows();
-      }
-
-      function searchMode2(query) {
-        const terms = (query || '')
-          .toString()
-          .split(/[\s\u3000]+/)
-          .map(t => t.trim())
-          .filter(t => t.length > 0);
-
-        if (terms.length === 0) {
-          log('検索語句が空です。');
-          renderCandidates([]);
-          document.getElementById('searchStatus').textContent = '';
-          lastSearchMeta = null;
-          updateAppendStatusFromMeta();
-          return;
-        }
-
-        const mode = 2;
-        const startDateObj = new Date();
-
-        log('mode 2: in-memory search 実行中...');
-
-        ensureMasterCache(allRows => {
-          const searchStartMs = performance.now();
-          const filtered = filterByTerms(allRows, query);
-          const searchEndMs = performance.now();
-          const endDateObj = new Date();
-
-          const elapsedMs = searchEndMs - searchStartMs;
-          const hitCount = filtered.length;
-          const allCount = allRows.length;
-
-          renderCandidates(filtered);
-
-          const startStr = formatDateTime(startDateObj);
-          const endStr   = formatDateTime(endDateObj);
-
-          lastSearchMeta = {
-            mode,
-            hitCount,
-            allCount,
-            elapsedMs,
-            startStr,
-            endStr
-          };
-
-          const statusText =
-            `${hitCount} 件ヒット (最大 100 件まで表示)` +
-            ` (mode ${mode}、${hitCount} 件ヒット、` +
-            `(参照用マスター全) ${allCount} 件中、` +
-            `検索所要時間 ${elapsedMs.toFixed(0)} ms、` +
-            `検索処理開始: ${startStr}、検索処理終了: ${endStr})`;
-
-          document.getElementById('searchStatus').textContent = statusText;
-
-          log(
-            `mode 2: ${hitCount} 件ヒット、` +
-            `(参照用マスター全) ${allCount} 件中、` +
-            `検索所要時間 ${elapsedMs.toFixed(0)} ms、` +
-            `検索処理開始: ${startStr}、検索処理終了: ${endStr}`
-          );
-
-          updateAppendStatusFromMeta();
-        });
-      }
-
-      function onSearchClick() {
-        const modeInput = document.getElementById('modeInput');
-        const queryInput = document.getElementById('queryInput');
-        const mode = Number(modeInput.value) || 2;
-        const query = queryInput.value || '';
-
-        document.getElementById('selectedInfo').textContent = '';
-        document.getElementById('appendStatus').textContent = '';
-        document.getElementById('appendButton').disabled = true;
-
-        if (mode !== 1 && mode !== 2) {
-          log('モードは 1 または 2 を指定してください。');
-          document.getElementById('searchStatus').textContent =
-            'モードは 1 または 2 を指定してください。';
-          return;
-        }
-
-        setModeToUrl(mode);
-
-        if (!query.trim()) {
-          log('検索語句が空です。');
-          renderCandidates([]);
-          document.getElementById('searchStatus').textContent = '';
-          lastSearchMeta = null;
-          updateAppendStatusFromMeta();
-          return;
-        }
-
-        if (mode === 1) {
-          searchMode1(query);
-        } else {
-          searchMode2(query);
-        }
-      }
-
-      function onAppendClick() {
-        if (selectedIndex < 0 || selectedIndex >= currentCandidates.length) {
-          log('候補が選択されていません。');
-          document.getElementById('appendStatus').textContent =
-            '候補が選択されていません。';
-          return;
-        }
-        const selected = currentCandidates[selectedIndex];
-        log(`選択中の候補をトランへ追加: ${selected.output01} / ${selected.output02}`);
-
-        document.getElementById('appendStatus').textContent =
-          'トランシートへ追記処理を実行中...';
-
-        google.script.run
-          .withSuccessHandler(res => {
-            if (res && res.success) {
-              const baseMsg = `トランシートに追記しました。行番号=${res.insertedRow}`;
-              document.getElementById('appendStatus').textContent = baseMsg;
-              log(baseMsg);
-              if (res.tranRowInfo && res.tranRowInfo.message) {
-                log(res.tranRowInfo.message);
-              }
-              if (typeof res.writeElapsedMs === 'number') {
-                log(`トランシートへの書き込み所要時間 ${res.writeElapsedMs} ms`);
-              }
-            } else {
-              const msg = '追記に失敗しました: ' +
-                (res && res.message ? res.message : '理由不明');
-              document.getElementById('appendStatus').textContent = msg;
-              log(msg);
-            }
-          })
-          .withFailureHandler(err => {
-            const msg = '追記エラー: ' + err.message;
-            document.getElementById('appendStatus').textContent = msg;
-            log(msg);
-          })
-          .appendTran(selected);
-      }
-
-      function formatDateTime(d) {
-        const pad = n => (n < 10 ? '0' + n : '' + n);
-        const y = d.getFullYear();
-        const m = pad(d.getMonth() + 1);
-        const da = pad(d.getDate());
-        const hh = pad(d.getHours());
-        const mm = pad(d.getMinutes());
-        const ss = pad(d.getSeconds());
-        return `${y}/${m}/${da} ${hh}:${mm}:${ss}`;
-      }
-
-      function updateAppendStatusFromMeta() {
-        const span = document.getElementById('appendStatus');
-        if (!lastSearchMeta) {
-          span.textContent = '候補一覧 (クリックで選択)';
-          return;
-        }
-        const m = lastSearchMeta;
-        if (m.mode === 2 && typeof m.allCount === 'number') {
-          span.textContent =
-            `候補一覧 (クリックで選択) (mode ${m.mode}、` +
-            `${m.hitCount} 件ヒット、` +
-            `(参照用マスター全) ${m.allCount} 件中、` +
-            `検索所要時間 ${m.elapsedMs.toFixed(0)} ms、` +
-            `検索処理開始: ${m.startStr}、検索処理終了: ${m.endStr})`;
-        } else {
-          span.textContent =
-            `候補一覧 (クリックで選択) (mode ${m.mode}、` +
-            `${m.hitCount} 件ヒット、` +
-            `検索所要時間 ${m.elapsedMs.toFixed(0)} ms、` +
-            `検索処理開始: ${m.startStr}、検索処理終了: ${m.endStr})`;
-        }
-      }
-
-      window.addEventListener('load', () => {
-        const urlMode = getModeFromUrl();
-        let mode = urlMode;
-        if (!mode) {
-          const tmplMode = '<?= initialMode ?>';
-          if (tmplMode === '1' || tmplMode === '2') {
-            mode = Number(tmplMode);
-          }
-        }
-        if (!mode) {
-          mode = 2;
-        }
-        document.getElementById('modeInput').value = String(mode);
-        document.getElementById('appendButton').disabled = true;
-
-        document.getElementById('searchButton').addEventListener('click', onSearchClick);
-        document.getElementById('appendButton').addEventListener('click', onAppendClick);
-
-        document.getElementById('queryInput').addEventListener('keydown', (event) => {
-          if (event.key === 'Enter') {
-            event.preventDefault();
-            onSearchClick();
-          }
+        div.addEventListener('click', function() {
+          selectedCandidate = currentCandidates[index];
+          updateSelectedInfo();
+          clearStatus();
+          renderCandidates(currentCandidates);
+          log('候補を選択しました。 output01=' + (selectedCandidate.output01 || ''));
         });
 
-        log(`ページを読み込みました。現在の検索モード = ${mode}`);
+        candidateList.appendChild(div);
       });
-    </script>
-  </body>
+    }
+
+    function ensureMode2RowsLoaded(callback) {
+      if (allRowsMode2 !== null) {
+        callback();
+        return;
+      }
+
+      log('mode 2 用の参照用マスター全件を読み込み開始');
+      setStatus('mode 2 用データを読み込み中...');
+
+      google.script.run
+        .withSuccessHandler(function(rows) {
+          allRowsMode2 = Array.isArray(rows) ? rows : [];
+          log('mode 2 用の参照用マスター全件を読み込み完了。件数=' + allRowsMode2.length);
+          setStatus('');
+          callback();
+        })
+        .withFailureHandler(function(err) {
+          log('mode 2 用データ読込エラー: ' + (err && err.message ? err.message : err));
+          setStatus('mode 2 用データ読込エラー');
+        })
+        .getMasterAllRows();
+    }
+
+    function searchMode1(terms) {
+      log('mode 1 で検索開始: ' + terms.join(' / '));
+      setStatus('検索中...');
+
+      google.script.run
+        .withSuccessHandler(function(results) {
+          const list = Array.isArray(results) ? results : [];
+          selectedCandidate = null;
+          updateSelectedInfo();
+          renderCandidates(list);
+          setStatus('検索完了: ' + list.length + ' 件');
+          log('mode 1 検索完了。件数=' + list.length);
+        })
+        .withFailureHandler(function(err) {
+          log('mode 1 検索エラー: ' + (err && err.message ? err.message : err));
+          setStatus('検索エラー');
+        })
+        .searchMasterByTerms(terms);
+    }
+
+    function searchMode2(terms) {
+      ensureMode2RowsLoaded(function() {
+        log('mode 2 で検索開始: ' + terms.join(' / '));
+        setStatus('検索中...');
+
+        const normTerms = terms.map(t => String(t).toLowerCase());
+        const results = allRowsMode2.filter(function(row) {
+          const a = row && row.output01 != null ? String(row.output01) : '';
+          const b = row && row.output02 != null ? String(row.output02) : '';
+          const target = (a + ' ' + b).toLowerCase();
+          return normTerms.every(function(term) {
+            return target.indexOf(term) !== -1;
+          });
+        }).slice(0, 100);
+
+        selectedCandidate = null;
+        updateSelectedInfo();
+        renderCandidates(results);
+        setStatus('検索完了: ' + results.length + ' 件');
+        log('mode 2 検索完了。件数=' + results.length);
+      });
+    }
+
+    function executeSearch() {
+      const mode = normalizeModeInput(modeInput.value);
+      if (!mode) {
+        setStatus('検索モードは 1 または 2 を入力してください。');
+        modeInput.focus();
+        return;
+      }
+
+      currentMode = mode;
+
+      const terms = tokenizeQuery(queryInput.value);
+      if (!terms.length) {
+        setStatus('検索語句を入力してください。');
+        queryInput.focus();
+        return;
+      }
+
+      if (currentMode === '1') {
+        searchMode1(terms);
+      } else {
+        searchMode2(terms);
+      }
+    }
+
+    function appendSelectedCandidate() {
+      if (!selectedCandidate) {
+        setStatus('追加対象の候補を選択してください。');
+        return;
+      }
+
+      setStatus('トランへ追加中...');
+      log('トラン追加開始: output01=' + (selectedCandidate.output01 || ''));
+
+      google.script.run
+        .withSuccessHandler(function(res) {
+          if (res && res.success) {
+            const msg = '追加完了: 行=' + res.insertedRow +
+              ' / 書込所要時間=' + res.writeElapsedMs + ' ms';
+            setStatus(msg);
+            log(msg);
+            if (res.message) {
+              log(res.message);
+            }
+          } else {
+            const errMsg = (res && res.message) ? res.message : '追加に失敗しました。';
+            setStatus(errMsg);
+            log('トラン追加失敗: ' + errMsg);
+          }
+        })
+        .withFailureHandler(function(err) {
+          const errMsg = err && err.message ? err.message : String(err);
+          setStatus('追加エラー');
+          log('トラン追加エラー: ' + errMsg);
+        })
+        .appendTran(selectedCandidate);
+    }
+
+    function init() {
+      modeInput.value = currentMode;
+      updateSelectedInfo();
+      renderCandidates([]);
+
+      searchBtn.addEventListener('click', executeSearch);
+      appendBtn.addEventListener('click', appendSelectedCandidate);
+
+      modeInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          queryInput.focus();
+        }
+      });
+
+      queryInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          executeSearch();
+        }
+      });
+
+      log('初期化完了。初期 mode=' + currentMode);
+    }
+
+    init();
+  </script>
+</body>
 </html>
