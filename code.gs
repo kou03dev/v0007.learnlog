@@ -2,11 +2,22 @@ const SHEET_TRAN = 'トラン';           // トラン シート
 const SHEET_REF  = '参照用マスター';   // 参照用マスター シート
 
 // AppVer 06
-// DeployVer 51
-// 2026/04/11 22:43:01
-// [https://www.perplexity.ai/search/itumooshi-hua-ninarimasu-xue-x-q3xpd5n7Ttq_2.oEWVHG7w](https://www.perplexity.ai/search/itumooshi-hua-ninarimasu-xue-x-q3xpd5n7Ttq_2.oEWVHG7w)
-// ◆追加機能30. 「選択中の候補をトランに追加」ボタン右側に表示されている、処理ステータス文字列に関して、以下のように仕様を変更する。
-// ▼29-01. 「候補一覧」内に表示されている候補を一つ以上選択 (クリック・タップ) すると、「選択中の候補をトランに追加」ボタン右側に表示されている、処理ステータス文字列をクリア (長さ 0 の文字列にする) する機能を追加
+// DeployVer 53
+// 2026/03/29 22:11:01
+// https://www.perplexity.ai/search/itumooshi-hua-ninarimasu-xue-x-q3xpd5n7Ttq_2.oEWVHG7w
+// ◆追加機能31. 「選択中の候補をトランに追加」ボタン押下時の処理の追加
+// ▼31-01. 「選択中の候補をトランに追加」ボタンが押されてから
+// 「トラン」シートに実際にデータの追加が完了するまで 
+// (あるいはその処理がエラーが発生して処理が終了するまで)、
+// 「選択中の候補をトランに追加」ボタンの Enabled を False にする
+// 処理を追加する。
+// (選択中の候補をトランに追加する処理が実行されている間に、
+// 利用者が誤って「選択中の候補をトランに追加」ボタンを押すことを防ぐため、
+// そのボタンの Enabled を一時的に False にする処理を追加する。
+// それだけではなく、トランシートへ追加が完了した後
+// あるいはエラーが発生した後は、そのボタンの Enabled を True にする
+// 処理も追加する。
+
 
 // ◆重要◆
 // 「デプロイ」を実行する前に、
@@ -332,10 +343,10 @@ function appendTran(selected) {
   const tStartWrite = new Date().getTime();
 
   sheet.getRange(nextRow, 1).setFormula(
-    '=HYPERLINK("#gid=316040792&range=C" & MAX(FILTER(ROW(C:C),C:C<>"")), "C列の最終データへ")'
+    '=HYPERLINK("#gid=316040792&range=C" & MAX(FILTER(ROW(C:C),C:C<>"" )), "C列の最終データへ")'
   );
   sheet.getRange(nextRow, 2).setFormula(
-    '=HYPERLINK("#gid=316040792&range=C" & MIN(FILTER(ROW(C:C),C:C<>"")), "C列の先頭データへ")'
+    '=HYPERLINK("#gid=316040792&range=C" & MIN(FILTER(ROW(C:C),C:C<>"" )), "C列の先頭データへ")'
   );
   sheet.getRange(nextRow, 3).setValue(formatted);
   sheet.getRange(nextRow, 4).setValue(selected.output01);
