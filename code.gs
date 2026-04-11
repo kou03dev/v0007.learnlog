@@ -3,7 +3,7 @@ const SHEET_REF  = '参照用マスター';   // 参照用マスター シート
 
 // AppVer 06
 // DeployVer 51
-// 2026/03/29 22:11:01
+// 2026/04/11 22:43:01
 // [https://www.perplexity.ai/search/itumooshi-hua-ninarimasu-xue-x-q3xpd5n7Ttq_2.oEWVHG7w](https://www.perplexity.ai/search/itumooshi-hua-ninarimasu-xue-x-q3xpd5n7Ttq_2.oEWVHG7w)
 // ◆追加機能30. 「選択中の候補をトランに追加」ボタン右側に表示されている、処理ステータス文字列に関して、以下のように仕様を変更する。
 // ▼29-01. 「候補一覧」内に表示されている候補を一つ以上選択 (クリック・タップ) すると、「選択中の候補をトランに追加」ボタン右側に表示されている、処理ステータス文字列をクリア (長さ 0 の文字列にする) する機能を追加
